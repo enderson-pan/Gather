@@ -7,6 +7,8 @@ namespace Ui {
 class MainWindow;
 }
 
+class InfoGetter;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -17,6 +19,10 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    InfoGetter* infoGetter_;
+
+private slots:
+    void on_refreshButton__clicked();
 };
 
 #endif // MAINWINDOW_H
