@@ -8,6 +8,7 @@ class MainWindow;
 }
 
 class InfoGetter;
+class TreeModel;
 
 class MainWindow : public QMainWindow
 {
@@ -19,10 +20,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    InfoGetter* infoGetter_;
-
-private slots:
-    void on_refreshButton__clicked();
+    TreeModel *treeModel_;
 };
 
 #endif // MAINWINDOW_H

@@ -1,27 +1,28 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QLabel>
-#include <QHBoxLayout>
+#include <QTreeView>
 
-#include "infogetter.h"
+
+#include "treemodel.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    infoGetter_(new InfoGetter)
+    treeModel_(new TreeModel)
+
 {
     ui->setupUi(this);
+
+    QTreeView *view = new QTreeView;
+    view->setModel(treeModel_);
+    setCentralWidget(view);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete infoGetter_;
+    delete treeModel_;
 }
 
-void MainWindow::on_refreshButton__clicked()
-{
-    QLabel* label = ui->textLable_;
-    label->setText("Output info here!");
-}
+
