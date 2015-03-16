@@ -1,6 +1,6 @@
 #include "treemodel.h"
 #include "treeitem.h"
-
+#include "infogetter.h"
 
 TreeModel::TreeModel(QObject *parent)
     : QAbstractItemModel(parent)
@@ -10,6 +10,8 @@ TreeModel::TreeModel(QObject *parent)
             << tr("可能的五级宝石数") << tr("可能的四级宝石数") << tr("可能的三级宝石数") \
              << tr("可能的红色强化石数") << tr("可能的金色强化石数");
     rootItem_ = new TreeItem(rootData);
+
+    setupModelData();
 }
 
 TreeModel::~TreeModel()
@@ -102,8 +104,7 @@ QVariant TreeModel::headerData(int section, Qt::Orientation orientation,
     return QVariant();
 }
 
-void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
+void TreeModel::setupModelData()
 {
-    lines.count();
-    parent = 0;
+    infoGetter_->setupModelData(rootItem_);
 }

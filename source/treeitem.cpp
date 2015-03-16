@@ -7,6 +7,10 @@ TreeItem::TreeItem(const QList<QVariant> &data, TreeItem *parent)
     : itemData_(data),
       parentItem_(parent)
 {
+    if (parent)
+    {
+        parent->appendChild(this);
+    }
 }
 
 TreeItem::~TreeItem()
