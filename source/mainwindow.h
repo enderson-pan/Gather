@@ -18,6 +18,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void setupTreeModel();
+
 private:
     Ui::MainWindow *ui;
     TreeModel *treeModel_;

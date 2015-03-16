@@ -25,4 +25,8 @@ MainWindow::~MainWindow()
     delete treeModel_;
 }
 
+void MainWindow::setupTreeModel()
+{
+    treeModel_->setupModelData();
+}
 
