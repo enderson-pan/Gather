@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 
 #include <QTreeView>
+#include <QTimer>
+#include <QtDebug>
 
 
 #include "treemodel.h"
@@ -14,9 +16,13 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    createActions();
+
     QTreeView *view = new QTreeView;
     view->setModel(treeModel_);
     setCentralWidget(view);
+
+    QTimer::singleShot(500, this, SLOT(setupTreeModelData()));
 }
 
 MainWindow::~MainWindow()
@@ -25,8 +31,40 @@ MainWindow::~MainWindow()
     delete treeModel_;
 }
 
-void MainWindow::setupTreeModel()
+void MainWindow::createActions()
+{
+
+}
+
+void MainWindow::setupTreeModelData()
 {
     treeModel_->setupModelData();
+    update();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

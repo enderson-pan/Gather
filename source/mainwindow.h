@@ -18,8 +18,15 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private:
+    void createActions();
+
 private slots:
-    void setupTreeModel();
+    void setupTreeModelData();
+
+private:
+    QToolBar *tooBar_;
+    QAction *setupTreeModelDataAction_;
 
 private:
     Ui::MainWindow *ui;

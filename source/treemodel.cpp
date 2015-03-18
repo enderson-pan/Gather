@@ -8,12 +8,12 @@ TreeModel::TreeModel(QObject *parent)
     QList<QVariant> rootData;
     rootData << tr("服务器\\用户") \
             << tr("可能的五级宝石数") << tr("可能的四级宝石数") << tr("可能的三级宝石数") \
-             << tr("可能的红色强化石数") << tr("可能的金色强化石数") << tr("设备号");
+             << tr("可能的金色强化石数") << tr("可能的橙色强化石数") << tr("设备号");
     rootItem_ = new TreeItem(rootData);
 
     infoGetter_ = new InfoGetter(rootItem_);
 
-    setupModelData();
+    setupModelStruct();
 }
 
 TreeModel::~TreeModel()
@@ -105,6 +105,11 @@ QVariant TreeModel::headerData(int section, Qt::Orientation orientation,
         return rootItem_->data(section);
 
     return QVariant();
+}
+
+void TreeModel::setupModelStruct()
+{
+    infoGetter_->setupModelStruct();
 }
 
 void TreeModel::setupModelData()
