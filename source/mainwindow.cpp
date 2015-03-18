@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QTreeView *view = new QTreeView;
     view->setModel(treeModel_);
+    view->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
     setCentralWidget(view);
 
     QTimer::singleShot(500, this, SLOT(setupTreeModelData()));
