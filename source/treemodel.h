@@ -4,6 +4,7 @@
 #include <QAbstractItemModel>
 
 class TreeItem;
+class InfoGetter;
 
 class TreeModel : public QAbstractItemModel
 {
@@ -23,10 +24,14 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
     int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
 
-    void setupModelData(const QStringList &lines, TreeItem *parent);
+    void setupModelStruct();
+    void setupModelData();
 
 private:
     TreeItem *rootItem_;
+
+private:
+    InfoGetter *infoGetter_;
 };
 
 #endif // TREEMODEL_H

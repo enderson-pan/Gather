@@ -19,6 +19,16 @@ public:
     ~MainWindow();
 
 private:
+    void createActions();
+
+private slots:
+    void setupTreeModelData();
+
+private:
+    QToolBar *tooBar_;
+    QAction *setupTreeModelDataAction_;
+
+private:
     Ui::MainWindow *ui;
     TreeModel *treeModel_;
 };
