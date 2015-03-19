@@ -129,5 +129,5 @@ void TreeModel::setupModelStruct()
 
 void TreeModel::setupModelData()
 {
-    emit dataChanged(index(0, 0), index(0, 0));
+    //emit dataChanged(index(0, 0), index(0, 0));
 }
