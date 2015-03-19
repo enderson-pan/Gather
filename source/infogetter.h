@@ -5,6 +5,7 @@
 #include <QVector>
 #include <QStringList>
 #include <QTextStream>
+#include <QFileInfoList>
 
 class TreeItem;
 
@@ -15,7 +16,7 @@ public:
     ~InfoGetter();
 
     void setupModelStruct();
-    void setupModelData();
+    void setupModelData(QFileInfoList &filesInfoList);
 
 
 private:

@@ -12,7 +12,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     treeModel_(new TreeModel)
-
 {
     ui->setupUi(this);
 
@@ -22,8 +21,6 @@ MainWindow::MainWindow(QWidget *parent) :
     view->setModel(treeModel_);
     view->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
     setCentralWidget(view);
-
-    QTimer::singleShot(500, this, SLOT(setupTreeModelData()));
 }
 
 MainWindow::~MainWindow()
@@ -36,13 +33,6 @@ void MainWindow::createActions()
 {
 
 }
-
-void MainWindow::setupTreeModelData()
-{
-    treeModel_->setupModelData();
-    update();
-}
-
 
 
 

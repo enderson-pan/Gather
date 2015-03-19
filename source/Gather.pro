@@ -16,11 +16,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     treemodel.cpp \
     treeitem.cpp \
-    infogetter.cpp
+    infogetter.cpp \
+    datafilesmonitor.cpp
 
 HEADERS  += mainwindow.h \
     treemodel.h \
     treeitem.h \
-    infogetter.h
+    infogetter.h \
+    datafilesmonitor.h
 
 FORMS    += mainwindow.ui
+
+CONFIG += c++11

@@ -2,9 +2,11 @@
 #define TREEMODEL_H
 
 #include <QAbstractItemModel>
+#include <QThread>
 
 class TreeItem;
-class InfoGetter;
+class DataFilesMonitor;
+class QTimer;
 
 class TreeModel : public QAbstractItemModel
 {
@@ -25,13 +27,20 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
 
     void setupModelStruct();
+
+signals:
+    void requestDataFiles();
+
+private slots:
     void setupModelData();
 
 private:
     TreeItem *rootItem_;
 
-private:
-    InfoGetter *infoGetter_;
+    DataFilesMonitor *dataFilesMonitor_;
+    QTimer *timer_;
+    QThread workingThread_;
+
 };
 
 #endif // TREEMODEL_H
