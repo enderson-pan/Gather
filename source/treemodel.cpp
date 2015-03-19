@@ -1,6 +1,9 @@
 #include "treemodel.h"
 #include "treeitem.h"
 #include "infogetter.h"
+#include "datafilesmonitor.h"
+
+#include <QTimer>
 
 TreeModel::TreeModel(QObject *parent)
     : QAbstractItemModel(parent)
@@ -11,15 +14,27 @@ TreeModel::TreeModel(QObject *parent)
              << tr("可能的金色强化石数") << tr("可能的橙色强化石数") << tr("设备号");
     rootItem_ = new TreeItem(rootData);
 
-    infoGetter_ = new InfoGetter(rootItem_);
+    dataFilesMonitor_ = new DataFilesMonitor(rootItem_);
+    dataFilesMonitor_->moveToThread(&workingThread_);
+    connect(this, SIGNAL(requestDataFiles()), dataFilesMonitor_, SLOT(requestDataFiles()));
+    timer_ = new QTimer(this);
+    connect(timer_, SIGNAL(timeout()), dataFilesMonitor_, SLOT(monitDataFiles()));
+    //QTimer::singleShot(1000, dataFilesMonitor_, SLOT(monitDataFiles()));
+    connect(dataFilesMonitor_, SIGNAL(updatModleDone()), this, SLOT(setupModelData()));
+
+    emit requestDataFiles();
 
     setupModelStruct();
+
+    workingThread_.start();
+    timer_->start(1000);
 }
 
 TreeModel::~TreeModel()
 {
     delete rootItem_;
-    delete infoGetter_;
+    workingThread_.quit();
+    workingThread_.wait();
 }
 
 QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent) const
@@ -109,10 +124,10 @@ QVariant TreeModel::headerData(int section, Qt::Orientation orientation,
 
 void TreeModel::setupModelStruct()
 {
-    infoGetter_->setupModelStruct();
+    dataFilesMonitor_->infoGetter()->setupModelStruct();
 }
 
 void TreeModel::setupModelData()
 {
-    infoGetter_->setupModelData();
+    emit dataChanged(index(0, 0), index(0, 0));
 }

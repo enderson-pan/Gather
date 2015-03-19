@@ -9,6 +9,7 @@ class MainWindow;
 
 class InfoGetter;
 class TreeModel;
+class DataFilesMonitor;
 
 class MainWindow : public QMainWindow
 {
@@ -21,8 +22,7 @@ public:
 private:
     void createActions();
 
-private slots:
-    void setupTreeModelData();
+    void requestData();
 
 private:
     QToolBar *tooBar_;

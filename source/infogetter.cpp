@@ -121,7 +121,7 @@ bool InfoGetter::doSetUpDataStruct(const QStringList &header, QTextStream &in)
     else if (QString("ids") == header[0])
     {
         QList<QVariant> itemData;
-        itemData << header[1] << "" << "" << "" << "" << "" << "";
+        itemData << header[1] << 0 << 0 << 0 << 0 << 0 << "";
         new TreeItem(itemData, itemStack_.front());
 
         while (!in.atEnd())
@@ -133,7 +133,7 @@ bool InfoGetter::doSetUpDataStruct(const QStringList &header, QTextStream &in)
                 if (!line.contains(idsEndStr))
                 {
                     QList<QVariant> itemData;
-                    itemData << line << "" << "" << "" << "" << "" << "";
+                    itemData << line << 0 << 0 << 0 << 0 << 0 << "";
                     new TreeItem(itemData, itemStack_.front());
                 }
                 else
@@ -156,17 +156,8 @@ bool InfoGetter::doSetUpDataStruct(const QStringList &header, QTextStream &in)
     return true;
 }
 
-void InfoGetter::setupModelData()
+void InfoGetter::setupModelData(QFileInfoList &filesInfoList)
 {
-    QString filesPath = QDir::homePath();
-    filesPath += "/workspace/game-info/data";
-    QDir::setCurrent(filesPath);
-    QDir dir(filesPath);
-
-    // Get all files' info in this dir.
-
-    QFileInfoList filesInfoList = dir.entryInfoList(QDir::Files);
-
     if (filesInfoList.isEmpty())
     {
         QMessageBox msgBox;
@@ -177,6 +168,8 @@ void InfoGetter::setupModelData()
 
     for (int i = 0; i < filesInfoList.size(); ++i)
     {
+        QString dir = filesInfoList[i].path();
+        QDir::setCurrent(dir);
         QFile dataFile(filesInfoList[i].fileName());
         if (!dataFile.open(QIODevice::ReadOnly | QIODevice::Text))
         {
@@ -258,7 +251,7 @@ bool InfoGetter::doSetUpDataContent(QString &id, QString &gemstoneCredits,
     if (0 == dataItem)
     {
         QMessageBox msgBox;
-        msgBox.setText(QString("用户 ID:%1 不存在，请检查上传数据文件。").arg(id));
+        msgBox.setText(QString("用户 ID:%1 不存在，请检查上传数据文件或者结构配置文件。").arg(id));
         msgBox.exec();
         return true;
     }
@@ -299,37 +292,30 @@ void InfoGetter::doSetUpGemstoneContent(TreeItem *dataItem, QString &gemstoneCre
     {
         int base = pow(5, 4 - i);
         int numGem = numGemCredits / base;
+        TreeItem *distrctItem = dataItem->parentItem();
+        int total = distrctItem->data(1 + i).toInt();
+        total -= dataItem->data(1 + i).toInt();
         dataItem->setData(1 + i, numGem);
+        total += numGem;
+        distrctItem->setData(1 + i, total);
         numGemCredits = numGemCredits - numGem * base;
     }
-
-    TreeItem *distrctItem = dataItem->parentItem();
-    for (int i = 0; i < 3; ++i)
-    {
-        int total = distrctItem->data(i + 1).toInt();
-        total += dataItem->data(i + 1).toInt();
-        distrctItem->setData(i + 1, total);
-    }
-
 }
 
 void InfoGetter::doSetUpStrengthenstoneConent(TreeItem *dataItem, QString &strengthenstoneCredits)
 {
     int numStrengthenCredits = strengthenstoneCredits.toInt();
-    for (int i = 0; i < 3; ++i)
-    {
-        int base = pow(5, 4 - i);
-        int numStrengthen = numStrengthenCredits / base;
-        dataItem->setData(4 + i, numStrengthen);
-        numStrengthenCredits = numStrengthenCredits - numStrengthen * base;
-    }
-
-    TreeItem *distrctItem = dataItem->parentItem();
     for (int i = 0; i < 2; ++i)
     {
-        int total = distrctItem->data(i + 4).toInt();
-        total += dataItem->data(i + 4).toInt();
-        distrctItem->setData(i + 4, total);
+        int base = pow(5, 3 - i);
+        int numStrengthen = numStrengthenCredits / base;
+        TreeItem *distrctItem = dataItem->parentItem();
+        int total = distrctItem->data(4 + i).toInt();
+        total -= dataItem->data(4 + i).toInt();
+        dataItem->setData(4 + i, numStrengthen);
+        total += numStrengthen;
+        distrctItem->setData(4 + i, total);
+        numStrengthenCredits = numStrengthenCredits - numStrengthen * base;
     }
 }
 
