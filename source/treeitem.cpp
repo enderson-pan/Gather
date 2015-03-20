@@ -62,3 +62,7 @@ TreeItem *TreeItem::parentItem()
     return parentItem_;
 }
 
+QList<TreeItem*>& TreeItem::children()
+{
+    return childItems_;
+}

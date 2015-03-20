@@ -17,10 +17,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     createActions();
 
-    QTreeView *view = new QTreeView;
-    view->setModel(treeModel_);
-    view->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    setCentralWidget(view);
+    treeView_ = new QTreeView;
+    treeView_->setModel(treeModel_);
+    treeView_->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    treeView_->setSortingEnabled(true);
+    setCentralWidget(treeView_);
+
+    QHeaderView *headerView = treeView_->header();
+    connect(headerView, SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
+            treeModel_, SLOT(sortByColumn(int, Qt::SortOrder)));
+    connect(treeModel_, SIGNAL(updateTreeView()), this, SLOT(updateTreeView()));
 }
 
 MainWindow::~MainWindow()
@@ -34,14 +40,10 @@ void MainWindow::createActions()
 
 }
 
-
-
-
-
-
-
-
-
+void MainWindow::updateTreeView()
+{
+    treeView_->update();
+}
 
 
 

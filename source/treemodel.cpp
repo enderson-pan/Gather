@@ -19,12 +19,11 @@ TreeModel::TreeModel(QObject *parent)
     connect(this, SIGNAL(requestDataFiles()), dataFilesMonitor_, SLOT(requestDataFiles()));
     timer_ = new QTimer(this);
     connect(timer_, SIGNAL(timeout()), dataFilesMonitor_, SLOT(monitDataFiles()));
-    //QTimer::singleShot(1000, dataFilesMonitor_, SLOT(monitDataFiles()));
-    connect(dataFilesMonitor_, SIGNAL(updatModleDone()), this, SLOT(setupModelData()));
+    connect(dataFilesMonitor_, SIGNAL(updatModleDone()), this, SLOT(setUpModelData()));
 
     emit requestDataFiles();
 
-    setupModelStruct();
+    setUpModelStruct();
 
     workingThread_.start();
     timer_->start(1000);
@@ -122,12 +121,75 @@ QVariant TreeModel::headerData(int section, Qt::Orientation orientation,
     return QVariant();
 }
 
-void TreeModel::setupModelStruct()
+void TreeModel::setUpModelStruct()
 {
     dataFilesMonitor_->infoGetter()->setupModelStruct();
 }
 
-void TreeModel::setupModelData()
+void TreeModel::setUpModelData()
 {
-    //emit dataChanged(index(0, 0), index(0, 0));
+    // update the whole tree views.
+    emit dataChanged(QModelIndex(), QModelIndex());
 }
+
+void TreeModel::sort(int column, Qt::SortOrder order)
+{
+    if (0 == column || 6 == column)
+    {
+        return;
+    }
+
+    struct lessThan
+    {
+        explicit lessThan(int column) { column_ = column;}
+        bool operator()(const TreeItem *rhs, const TreeItem *lhs)
+        {
+            return rhs->data(column_).toInt() < lhs->data(column_).toInt();
+        }
+
+        int column_;
+    };
+
+    int numPrefecture = rootItem_->childCount();
+    for (int prefectureCount = 0; prefectureCount < numPrefecture; ++prefectureCount)
+    {
+        TreeItem *prefectureItem = rootItem_->child(prefectureCount);
+        int numDistrict = prefectureItem->childCount();
+        for (int districtCount = 0; districtCount < numDistrict; ++districtCount)
+        {
+            TreeItem *districtItem = prefectureItem->child(districtCount);
+            std::sort(districtItem->children().begin(), districtItem->children().end(),
+                      lessThan(column));
+            if (Qt::DescendingOrder == order)
+            {
+                QList<TreeItem*> reversedChildren;
+                std::reverse_copy(districtItem->children().begin(), districtItem->children().end(),
+                                  std::back_inserter(reversedChildren));
+                std::copy(reversedChildren.begin(), reversedChildren.end(),
+                          districtItem->children().begin());
+            }
+
+            // update the whole tree views.
+            emit dataChanged(QModelIndex(), QModelIndex());
+        }
+    }
+}
+
+void TreeModel::sortByColumn(int column, Qt::SortOrder order)
+{
+    sort(column, order);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -10,6 +10,7 @@ class MainWindow;
 class InfoGetter;
 class TreeModel;
 class DataFilesMonitor;
+class QTreeView;
 
 class MainWindow : public QMainWindow
 {
@@ -19,17 +20,20 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
+    void updateTreeView();
+
 private:
     void createActions();
 
     void requestData();
 
 private:
+    Ui::MainWindow *ui;
+    QTreeView *treeView_;
     QToolBar *tooBar_;
     QAction *setupTreeModelDataAction_;
 
-private:
-    Ui::MainWindow *ui;
     TreeModel *treeModel_;
 };
 
