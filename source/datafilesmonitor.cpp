@@ -31,7 +31,6 @@ void DataFilesMonitor::requestDataFiles()
 
 void DataFilesMonitor::monitDataFiles()
 {
-    qDebug() << "void DataFilesMonitor::monitDataFiles()" << "Time:" << QTime::currentTime();
     struct MyFileInfo
     {
         QString fileName;
@@ -88,13 +87,6 @@ void DataFilesMonitor::monitDataFiles()
 
         emit updatModleDone();
     }
-
-
-    /*std::set_difference(fileInfo.begin(), fileInfo.end(),
-                        fileInfoHistory_.begin(), fileInfoHistory_.end(),
-                        back_inserter(filesNeedParsed_),
-                        [] (const QFileInfo &rhs, const QFileInfo &lhs) {
-        return (rhs.lastModified() < lhs.lastModified() );});*/
 }
 
 

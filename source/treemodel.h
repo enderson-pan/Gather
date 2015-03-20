@@ -25,14 +25,20 @@ public:
     QModelIndex parent(const QModelIndex &index) const Q_DECL_OVERRIDE;
     int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
     int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
+    void sort(int column, Qt::SortOrder order) Q_DECL_OVERRIDE;
 
-    void setupModelStruct();
+public slots:
+    void sortByColumn(int column, Qt::SortOrder order);
 
 signals:
     void requestDataFiles();
+    void updateTreeView();
+
+private:
+    void setUpModelStruct();
 
 private slots:
-    void setupModelData();
+    void setUpModelData();
 
 private:
     TreeItem *rootItem_;
